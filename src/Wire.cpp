@@ -254,7 +254,10 @@ size_t TwoWire::write(uint8_t data)
   }else{
   // in slave send mode
     // reply to master
-    twi_transmit(&data, 1);
+    uint8_t n = twi_transmit(&data, 1);
+    if(n != 0){
+      return 0;
+    }
   }
   return 1;
 }
@@ -266,13 +269,24 @@ size_t TwoWire::write(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
+    size_t total = 0；
+    size_t t = 0；
     for(size_t i = 0; i < quantity; ++i){
-      write(data[i]);
+      t = write(data[i]);
+      if(t != 1){
+        break;
+      }else{
+        total += 1;
+      }
     }
+    return total;
   }else{
   // in slave send mode
     // reply to master
-    twi_transmit(data, quantity);
+    uint8_t n = twi_transmit(data, quantity);
+    if(n != 0){
+      return 0;
+    }
   }
   return quantity;
 }
