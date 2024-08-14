@@ -269,8 +269,8 @@ size_t TwoWire::write(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
-    size_t total = 0；
-    size_t t = 0；
+    size_t total = 0;
+    size_t t = 0;
     for(size_t i = 0; i < quantity; ++i){
       t = write(data[i]);
       if(t != 1){
